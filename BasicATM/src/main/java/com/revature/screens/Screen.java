@@ -4,6 +4,8 @@ public abstract class Screen {
 
     protected String name;
     protected String route;
+    protected String main_color;
+    protected String main_color_bold;
 
     public Screen(String name, String route) {
         this.name = name;

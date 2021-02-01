@@ -3,7 +3,7 @@ package com.revature.utilities;
 public class LinkedList <T> {
 
     private int size;
-    private Node<T> head;
+    public Node<T> head;
     private Node<T> tail;
 
     public T findFirst(T data) {
@@ -95,10 +95,10 @@ public class LinkedList <T> {
         }
     }
 
-    private static class Node<T> {
-        T data;
-        Node<T> nextNode;
-        Node<T> prevNode;
+    public static class Node<T> {
+        public T data;
+        public Node<T> nextNode;
+        public Node<T> prevNode;
 
         Node(T data) {
             this.data = data;
