@@ -1,9 +1,11 @@
 package com.revature.utilities;
 
 import com.revature.repositories.AccountRepository;
+import com.revature.repositories.TransactionRepository;
 import com.revature.repositories.UserRepository;
 import com.revature.screens.*;
 import com.revature.services.AccountService;
+import com.revature.services.TransactionService;
 import com.revature.services.UserService;
 
 import java.io.BufferedReader;
@@ -29,8 +31,10 @@ public class AppState {
 
         final UserRepository userRepo = new UserRepository();
         final AccountRepository acctRepo = new AccountRepository();
+        final TransactionRepository transRepo = new TransactionRepository();
         final UserService userService = new UserService(userRepo);
         final AccountService acctService = new AccountService(acctRepo);
+        final TransactionService transService = new TransactionService(transRepo);
 
         router = new ScreenRouter();
         router.addScreen(new HomeScreen());
@@ -38,6 +42,7 @@ public class AppState {
         router.addScreen(new RegisterScreen(userService));
         router.addScreen(new DashboardScreen(userService, acctService));
         router.addScreen(new NewAccountScreen(userService, acctService));
+        router.addScreen(new TransactionScreen(userService, acctService, transService));
 
         System.out.println(ANSI_GREEN + "[LOG] - Application initialized" + ANSI_RESET);
         System.out.println(CLEAR_SCREEN);

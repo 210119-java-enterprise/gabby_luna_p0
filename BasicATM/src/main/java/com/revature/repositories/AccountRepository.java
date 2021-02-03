@@ -5,6 +5,7 @@ import com.revature.models.AppUser;
 import com.revature.models.BankAccount;
 import com.revature.utilities.ConnectionFactory;
 import com.revature.utilities.LinkedList;
+import com.revature.utilities.Map;
 import sun.awt.image.ImageWatched;
 
 import java.sql.Connection;
@@ -49,10 +50,8 @@ public class AccountRepository implements CrudRepository{
     }
 
     //Other Database Calls --------------------------------------------------
-    public LinkedList <BankAccount> findAccountsByUserId(int userId){
-        LinkedList <BankAccount> accounts = new LinkedList<>();
-
-        AppUser user = null;
+    public Map <Integer, BankAccount> findAccountsByUserId(int userId){
+        Map <Integer, BankAccount> accounts = new Map<>();
 
         try(Connection conn = ConnectionFactory.getInstance().getConnection()){
 
@@ -86,11 +85,32 @@ public class AccountRepository implements CrudRepository{
         }
     }
 
+    public double updateAccountBalance(int accountId, double newBalance){
+        System.out.println("Updating account : " + accountId + " to balance : " + newBalance);
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+
+            String sql =    "UPDATE Accounts " +
+                            "SET Balance = ? " +
+                            "WHERE AccountId = ?";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+            pStmt.setDouble(1, newBalance);
+            pStmt.setInt(2, accountId);
+
+            pStmt.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return newBalance;
+    }
+
     //AccountsRepo Utilities -----------------------------------------------------------
     //Returns a list of BankAccounts that get returned by the SQL query
-    private LinkedList<BankAccount> mapResultSet (ResultSet rs) throws SQLException {
+    private Map<Integer, BankAccount> mapResultSet (ResultSet rs) throws SQLException {
 
-        LinkedList<BankAccount> accounts = new LinkedList<>();
+        Map<Integer, BankAccount> accounts = new Map<>();
 
         while (rs.next()){
             BankAccount account = new BankAccount();
@@ -98,7 +118,7 @@ public class AccountRepository implements CrudRepository{
             account.setAccountType(AccountType.valueOf(rs.getString("account_type")));
             account.setUserId(rs.getInt("userId"));
             account.setBalance(rs.getDouble("balance"));
-            accounts.insert(account);
+            accounts.put(account.getAccountId(), account);
         }
         return accounts;
     }

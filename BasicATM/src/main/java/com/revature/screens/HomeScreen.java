@@ -7,26 +7,24 @@ public class HomeScreen extends Screen{
 
     public HomeScreen(){
         super("HomeScreen", "/home");
-        main_color = ANSI_BLUE;
-        main_color_bold = BLUE_BOLD_BRIGHT;
     }
 
     @Override
     public void render() {
         //Welcome message:
-        System.out.println("/************************************************************************/");
-        System.out.println("/*                      " + main_color_bold + "Welcome to the BasicATM!" + ANSI_RESET
-                            + "                        */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "1.) Login" + ANSI_RESET
-                            + "                                                            */");
-        System.out.println("/* " + main_color + "2.) Register" + ANSI_RESET
-                            +"                                                         */");
-        System.out.println("/* " + main_color + "3.) Exit" + ANSI_RESET
-                            +"                                                             */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/************************************************************************/");
+        System.out.println(BORDER);
+        String message = "Welcome to the BasicATM!";
+        CenterLine((main_color_bold + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        FinishLine("", 0);
+        message = "1.) Login";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = "2.) Register";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = "3.) Exit";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        System.out.println(BORDER);
         System.out.println("");
 
         try{

@@ -9,6 +9,7 @@ import com.revature.services.UserService;
 import com.revature.utilities.LinkedList;
 
 import static com.revature.ATM.app;
+import static com.revature.ATM.main;
 import static com.revature.utilities.ConsoleDecoration.*;
 
 public class NewAccountScreen extends Screen{
@@ -20,28 +21,33 @@ public class NewAccountScreen extends Screen{
         super("NewAccountScreen", "/newAccount");
         this.userService = userService;
         this.accountService = accountService;
-        main_color = ANSI_BLUE;
-        main_color_bold = BLUE_BOLD_BRIGHT;
     }
 
     @Override
     public void render() {
         AppUser user = app().getCurrentSession().getSessionUser();
-        LinkedList<BankAccount> accounts = user.getAccounts();
+        LinkedList<Integer> accountIds = user.getAccounts();
 
-        System.out.println("/************************************************************************/");
-        System.out.println("/*                      " + main_color_bold + "Open a New Account" + ANSI_RESET
-                + "                             */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "Active Accounts: " + user.getNumAccounts() +ANSI_RESET
-                + "                                                   */");
-        System.out.println("/*                                                                      */");
+
+        //Register instructions:
+        System.out.println(BORDER);
+        String message = "Open a New Account";
+        CenterLine((main_color_bold + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        FinishLine("", 0);
+        message = " Active Accounts: ";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
         //Print Active Accounts
-        for (LinkedList.Node <BankAccount> cur = accounts.head; cur != null; cur = cur.nextNode) {
-            cur.data.printAccount(main_color);
+        for (Integer cur = accountIds.pop(); cur != null; cur = accountIds.pop()) {
+            user.getBankAccount(cur).printAccount(main_color);
         }
-        System.out.println("/*                                                                      */");
-        System.out.println("/************************************************************************/");
+        FinishLine("", 0);
+        message = " (../ to go back)";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        System.out.println(BORDER);
+        System.out.println("");
 
         try{
             //Print Account type options
@@ -55,7 +61,8 @@ public class NewAccountScreen extends Screen{
 
             accountService.addNewAccount(acctType, user.getId());
 
-            System.out.println(main_color + "New Account successfully created, navigating to register screen...\n" + ANSI_RESET);
+            System.out.print(CLEAR_SCREEN);
+            System.out.println(main_color + "New Account successfully created, returning to dashboard ...\n" + ANSI_RESET);
             app().getRouter().navigate("/dashboard");
 
         }catch (Exception e) {
@@ -63,6 +70,5 @@ public class NewAccountScreen extends Screen{
             System.err.println(ANSI_RED + "Shutting down application" + ANSI_RESET);
             app().setAppRunning(false);
         }
-        System.out.print(CLEAR_SCREEN);
     }
 }

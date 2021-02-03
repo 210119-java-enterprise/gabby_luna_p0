@@ -9,28 +9,28 @@ import static com.revature.utilities.ConsoleDecoration.*;
 import static com.revature.utilities.ConsoleDecoration.ANSI_RESET;
 
 public class RegisterScreen extends Screen{
-
+    private UserService userService;
     public RegisterScreen(UserService userService) {
         super("RegisterScreen", "/register");
-        main_color = ANSI_BLUE;
-        main_color_bold = BLUE_BOLD_BRIGHT;
+        this.userService = userService;
     }
 
     @Override
     public void render() {
-        //Welcome message:
-        System.out.println("/************************************************************************/");
-        System.out.println("/*                      " + main_color_bold + "Welcome to the BasicATM!" + ANSI_RESET
-                + "                        */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "Please enter your information below..."
-                + ANSI_RESET + "                               */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "(../ to go back)" + ANSI_RESET
-                +"                                                     */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/************************************************************************/");
+
+        //Register instructions:
+        System.out.println(BORDER);
+        String message = "Welcome to the BasicATM!";
+        CenterLine((main_color_bold + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        FinishLine("", 0);
+        message = "To register a new Account, please enter your information below...";
+        FinishLine((main_color+ message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        message = "(../ to go back)";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        System.out.println(BORDER);
         System.out.println("");
 
         try{
@@ -52,10 +52,13 @@ public class RegisterScreen extends Screen{
             String password = app().getConsole().readLine();
             System.out.print(CLEAR_SCREEN);
 
-            //TODO: REGISTER USER
-
-            System.out.println(main_color + "Proceeding to login screen...\n" + ANSI_RESET);
-            app().getRouter().navigate("/login");
+            //Register User's Credentials
+            if (userService.register(firstName, lastName, username, password)) {
+                //Successfully created new user
+                System.out.println(main_color + "Proceeding to login screen...\n" + ANSI_RESET);
+                app().getRouter().navigate("/login");
+            }else
+                app().getRouter().navigate("/register");
 
         }catch (Exception e) {
             e.printStackTrace();

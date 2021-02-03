@@ -17,23 +17,23 @@ public class LoginScreen extends Screen{
     public LoginScreen(UserService userService) {
         super("LoginScreen", "/login");
         this.userService = userService;
-        main_color = ANSI_BLUE;
-        main_color_bold = BLUE_BOLD_BRIGHT;
     }
 
     @Override
     public void render() {
-        System.out.println("/************************************************************************/");
-        System.out.println("/*                      " + main_color_bold + "Welcome to the BasicATM!" + ANSI_RESET
-                            + "                        */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "Please enter your user credentials to continue..."
-                            + ANSI_RESET + "                    */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "(../ to go back)" + ANSI_RESET
-                            +"                                                     */");
-        System.out.println("/************************************************************************/");
+        //Login instructions:
+        System.out.println(BORDER);
+        String message = "Welcome to the BasicATM!";
+        CenterLine((main_color_bold + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        FinishLine("", 0);
+        message = "Please enter your user credentials to continue...";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        message = "(../ to go back)";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        System.out.println(BORDER);
         System.out.println("");
 
         try{

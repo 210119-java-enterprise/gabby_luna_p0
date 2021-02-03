@@ -4,6 +4,8 @@ import com.revature.repositories.UserRepository;
 
 import com.revature.services.AccountService;
 import com.revature.utilities.LinkedList;
+import com.revature.utilities.Map;
+
 import java.util.Objects;
 
 /*
@@ -18,7 +20,7 @@ public class AppUser {
     private String lastName;
     private String username;
     private String password;
-    private LinkedList <BankAccount> accounts;
+    private Map<Integer, BankAccount> accounts;
     private int numAccounts;
 
     //Constructors ---------------------------------
@@ -76,13 +78,19 @@ public class AppUser {
         this.password = password;
     }
 
-    public LinkedList<BankAccount> getAccounts() {
-        return accounts;
+    public LinkedList<Integer> getAccounts() {
+        return accounts.keyList();
     }
 
-    public void setAccounts(LinkedList<BankAccount> accounts) {
+    public BankAccount getBankAccount(int accountId){
+        if (accounts == null) return null;
+
+        return accounts.get(accountId);
+    }
+
+    public void setAccounts(Map<Integer, BankAccount> accounts) {
         this.accounts = accounts;
-        this.numAccounts = accounts.size();
+        this.numAccounts = accounts.getSize();
     }
 
     public int getNumAccounts() {

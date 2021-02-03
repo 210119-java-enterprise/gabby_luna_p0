@@ -69,6 +69,27 @@ public class UserRepository implements CrudRepository<AppUser>{
         return user;
     }
 
+    public AppUser createNewUser(String firstName, String lastName, String username, String password){
+        try(Connection conn = ConnectionFactory.getInstance().getConnection()){
+
+            String sql =    "insert into Users " +
+                            "(firstname, lastname, username, user_password) " +
+                            "values " +
+                            "(?, ?, ?, ?)";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, firstName);
+            pStmt.setString(2, lastName);
+            pStmt.setString(3, username);
+            pStmt.setString(4, password);
+
+            pStmt.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return findUserByUsernameAndPassword(username, password);
+    }
+
     //UserRepo Utilities -----------------------------------------------------------
     //Returns a list of App Users that get returned by the SQL query
     private LinkedList<AppUser> mapResultSet (ResultSet rs) throws SQLException {

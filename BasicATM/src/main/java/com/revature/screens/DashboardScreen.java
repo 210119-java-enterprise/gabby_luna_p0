@@ -19,8 +19,6 @@ public class DashboardScreen extends Screen{
         super("DashboardScreen", "/dashboard");
         this.userService = userService;
         this.accountService = accountService;
-        main_color = ANSI_BLUE;
-        main_color_bold = BLUE_BOLD_BRIGHT;
     }
 
     @Override
@@ -28,35 +26,33 @@ public class DashboardScreen extends Screen{
         AppUser user = app().getCurrentSession().getSessionUser();
         //Update Accounts for user
         user.setAccounts(accountService.getAccounts(user.getId()));
-        LinkedList <BankAccount> accounts = user.getAccounts();
+        LinkedList <Integer> accountIds = user.getAccounts();
 
-        String name = user.getFirstName() + " " + user.getLastName();
-        System.out.println("/************************************************************************/");
-        System.out.println("/*                      " + main_color_bold + "Welcome back " + name + "!" + ANSI_RESET
-                + "                        */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "Active Accounts: " + user.getNumAccounts() +ANSI_RESET
-                + "                                                   */");
-        System.out.println("/*                                                                      */");
-
+        //Dashboard Print out:
+        System.out.println(BORDER);
+        String message = "Welcome back " + user.getFirstName() + " " + user.getLastName() + "!";
+        CenterLine((main_color_bold + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        message = " Active Accounts: " + user.getNumAccounts();
+        FinishLine((main_color+ message + ANSI_RESET), message.length());
+        FinishLine("", 0);
         //Print Active Accounts
-        for (LinkedList.Node <BankAccount> cur = accounts.head; cur != null; cur = cur.nextNode) {
-            cur.data.printAccount(main_color);
+        for (Integer cur = accountIds.pop(); cur != null; cur = accountIds.pop()) {
+            user.getBankAccount(cur).printAccount(main_color);
         }
-
-        System.out.println("/*                                                                      */");
-        System.out.println("/* " + main_color + "1.) Open New Account" + ANSI_RESET
-                +"                                                 */");
-        System.out.println("/* " + main_color + "2.) View Transaction History" + ANSI_RESET
-                +"                                         */");
-        System.out.println("/* " + main_color + "3.) Make Deposit/Withdrawal" + ANSI_RESET
-                +"                                          */");
-        System.out.println("/* " + main_color + "4.) Transfer Funds" + ANSI_RESET
-                +"                                                   */");
-        System.out.println("/* " + main_color + "5.) Logout" + ANSI_RESET
-                +"                                                           */");
-        System.out.println("/*                                                                      */");
-        System.out.println("/************************************************************************/");
+        FinishLine("", 0);
+        message = " 1.) Open New Account";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = " 2.) View Transaction History";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = " 3.) Make Deposit/Withdrawal";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = " 4.) Transfer Funds";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = " 5.) Logout";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        FinishLine("", 0);
+        System.out.println(BORDER);
         System.out.println("");
 
         try{
@@ -74,7 +70,7 @@ public class DashboardScreen extends Screen{
                     break;
                 case "3":
                     System.out.println(main_color + "Navigating to transaction screen...\n" + ANSI_RESET);
-                    //app().getRouter().navigate("/register");
+                    app().getRouter().navigate("/transaction");
                     break;
                 case "4":
                     System.out.println(main_color + "Navigating to transfer funds screen...\n" + ANSI_RESET);
@@ -82,7 +78,8 @@ public class DashboardScreen extends Screen{
                     break;
                 case "5":
                     System.out.println(ANSI_RED + "Exiting application...\n" + ANSI_RESET);
-                    //app().setAppRunning(false);
+                    app().setAppRunning(false);
+                    app().getRouter().navigate("/home");
                     break;
                 default:
                     System.out.println(ANSI_RED + "Invalid selection!" + ANSI_RESET);

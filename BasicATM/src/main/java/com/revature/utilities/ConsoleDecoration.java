@@ -1,6 +1,7 @@
 package com.revature.utilities;
 
 public class ConsoleDecoration {
+    private static final int LINE_LENGTH = 70;
 
     //Console colors
     public static final String ANSI_RESET = "\u001B[0m";
@@ -34,4 +35,25 @@ public class ConsoleDecoration {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
     public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    public static final String BORDER = "/************************************************************************/";
+
+    public static void FinishLine(String s, int x){
+        System.out.print("/*" + s);
+        for (int i = x; i < LINE_LENGTH; i++)
+            System.out.print(" ");
+        System.out.println("*/");
+    }
+
+    public static void CenterLine(String s, int x){
+        System.out.print("/*");
+        int space = (LINE_LENGTH - x)/2;
+        for (int i = 0; i < space; i++){
+            System.out.print(" ");
+        }
+        System.out.print(s);
+        for (int i = space + x; i < LINE_LENGTH; i++){
+            System.out.print(" ");
+        }
+        System.out.print("*/\n");
+    }
 }
