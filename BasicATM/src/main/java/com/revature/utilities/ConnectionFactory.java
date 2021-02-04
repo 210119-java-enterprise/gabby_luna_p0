@@ -1,5 +1,7 @@
 package com.revature.utilities;
 
+import org.postgresql.util.PSQLException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -36,7 +38,7 @@ public class ConnectionFactory {
         return connFactory;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
 
         Connection conn = null;
 

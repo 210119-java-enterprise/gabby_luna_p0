@@ -2,20 +2,44 @@ package com.revature.models;
 
 import static com.revature.utilities.ConsoleDecoration.*;
 
+/**
+ * Describes an object representing a Transaction, the related transaction information.
+ * <p>
+ * @author Gabrielle Luna
+ */
 public class Transaction {
+
+    //Transaction info ------------------------------------
     private int transactionId;
     private TransactionType transactionType;
     private int accountId;
     private double amount;
     private String date;
 
+    //Constructors ---------------------------------
 
-    public void Transaction(int transactionId, TransactionType transactionType, double amount){
-        this.transactionId = transactionId;
-        this.transactionType = transactionType;
-        this.amount = 0;
+    /**
+     * Creates an empty Transaction
+     */
+    public Transaction() {
     }
 
+    /**
+     * Creates a Transaction with the minimum amount of required information. Transaction id and
+     * the transaction date is uninitialized. Amount is made negative or positive based on transaction
+     * type.
+     * <p>
+     * @param transactionType   required to determine whether the amount is negative or positive
+     * @param accountId         required to tie the transaction to an account
+     * @param amount            required to create a transaction, expected to be positive regardless of type
+     */
+    public void Transaction(TransactionType transactionType, int accountId, double amount){
+        this.transactionType = transactionType;
+        this.accountId = accountId;
+        this.amount = (transactionType == TransactionType.CREDIT)? amount : amount * -1;
+    }
+
+    // Getters and Setters -------------------------
     public int getTransactionId() {
         return transactionId;
     }
@@ -56,11 +80,21 @@ public class Transaction {
         this.date = date;
     }
 
+    //Bank Account utilities --------------------------------------
+
+    /**
+     * Used to print out a transaction summary using the console decoration class.
+     * A transaction is printed on one line within left and right boundaries. The line
+     * has the transaction id, transaction type, and transaction amount formatted to
+     * match US currency standards and color coded to indicate transaction type.
+     * <p>
+     * @param color
+     */
     public void printTransaction(String color) {
         String message = "Transaction : " + transactionId + "    Date : " + date + "    Amount : $" ;
         String t_amount = String.format("%.2f", amount);
         String type = (transactionType == TransactionType.CREDIT)? ANSI_GREEN : ANSI_RED;
 
-        FinishLine((color + message + type + amount + ANSI_RESET), message.length() + t_amount.length());
+        FinishLine((color + message + type + t_amount + ANSI_RESET), message.length() + t_amount.length());
     }
 }

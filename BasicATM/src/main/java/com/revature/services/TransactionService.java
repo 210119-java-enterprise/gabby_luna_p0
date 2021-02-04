@@ -7,6 +7,7 @@ import com.revature.models.TransactionType;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
 import com.revature.utilities.LinkedList;
+import com.revature.utilities.Map;
 
 public class TransactionService {
 
@@ -18,7 +19,7 @@ public class TransactionService {
         this.transRepo = transRepo;
     }
 
-    public LinkedList<Transaction> getTransactions(int accountId){
+    public Map<Integer, Transaction> getTransactions(int accountId){
         return transRepo.findTransactionsByAccountId(accountId);
     }
 

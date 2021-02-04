@@ -3,38 +3,42 @@ package com.revature.repositories;
 import com.revature.models.*;
 import com.revature.utilities.ConnectionFactory;
 import com.revature.utilities.LinkedList;
+import com.revature.utilities.Map;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class TransactionRepository implements CrudRepository{
-
-    //Standard SQL statement -------------------------------------------
-    private final String base = "SELECT * " +
-                                "FROM transactions ";
+/**
+ * Provides access to the database for Transaction objects. Implements the CrudRepository
+ * to allow for a set of standardized database calls, non of which are currently used.
+ * Crud Repository will remain as a potential tool for future expansion
+ * <p>
+ * @author Gabrielle Luna
+ */
+public class TransactionRepository implements CrudRepository <Transaction>{
 
     //Overrides --------------------------------------------------------
     @Override
-    public void save(Object newObj) {
+    public void save(Transaction newTransaction) {
         System.err.println("Not implemented");
     }
 
     @Override
-    public LinkedList findAll() {
-        System.err.println("Not implemented");
-        return null;
-    }
-
-    @Override
-    public Object findById(int id) {
+    public LinkedList<Transaction> findAll() {
         System.err.println("Not implemented");
         return null;
     }
 
     @Override
-    public boolean update(Object updatedObj) {
+    public Transaction findById(int id) {
+        System.err.println("Not implemented");
+        return null;
+    }
+
+    @Override
+    public boolean update(Transaction updatedTransaction) {
         System.err.println("Not implemented");
         return false;
     }
@@ -46,12 +50,22 @@ public class TransactionRepository implements CrudRepository{
     }
 
     //Queries -----------------------------------------------------
-    public LinkedList <Transaction> findTransactionsByAccountId(int accountId){
-        LinkedList <Transaction> transactions = new LinkedList<>();
+    /**
+     * Calls database with a Query looking for all transactions matching the provided accountId. Utilizes
+     * the mapResultSet method to convert the results into a returnable Map of transaction ids
+     * and their corresponding Transactions
+     * <p>
+     * @param accountId     used to find relevant transactions
+     * @return Map          containing transaction Ids and their corresponding accounts, may be empty
+     */
+    public Map<Integer, Transaction> findTransactionsByAccountId(int accountId){
+        Map <Integer, Transaction> transactions = new Map<>();
 
         try(Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            String sql = base + "WHERE accountId = ?";
+            String sql ="SELECT * " +
+                        "FROM transactions " +
+                        "WHERE accountId = ?";
             PreparedStatement pStmt = conn.prepareStatement(sql);
             pStmt.setInt(1, accountId);
 
@@ -65,15 +79,22 @@ public class TransactionRepository implements CrudRepository{
         return transactions;
     }
 
+    /**
+     * Calls database with a Query looking for all transactions with an accountId matching the parameter
+     * and then summing their values. As only one value will be returned so the ResultSet is parsed within
+     * the method.
+     * <p>
+     * @param accountId     Used to decide what accounts transactions to sum
+     * @return double       containing the sum calculated
+     */
     public double SumTransactions(int accountId){
         double sum = 0;
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
             String sql ="SELECT SUM(Amount) " +
                         "FROM (SELECT Amount, accountId " +
-                                "FROM transactions t " +
-                                "GROUP BY transactionid) as b " +
-                        "WHERE b.accountid = ?";
+                                "FROM transactions t) as b " +
+                        "WHERE b.accountId = ?";
             PreparedStatement pStmt = conn.prepareStatement(sql);
             pStmt.setInt(1, accountId);
 
@@ -90,6 +111,16 @@ public class TransactionRepository implements CrudRepository{
     }
 
     //Updates -----------------------------------------------------
+
+    /**
+     * Calls the database with an Update to insert a new transaction. Requires the Transaction type,
+     * relevant accountId, and amount for that transaction. The transactions id and date will be set by
+     * the database. Date will be set to current date.
+     * <p>
+     * @param type          The transaction type, used for color coding and value sign adjustment
+     * @param accountId     Transaction needs a reference to the relevant account
+     * @param amount        All transactions need a value
+     */
     public void insertNewTransaction(TransactionType type, int accountId, double amount){
         System.out.println("New Transaction type: " + type.toString() + ", account: " + accountId + ", amount: " + amount);
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
@@ -108,12 +139,19 @@ public class TransactionRepository implements CrudRepository{
         }
     }
 
-
     //AccountsRepo Utilities -----------------------------------------------------------
-    //Returns a list of BankAccounts that get returned by the SQL query
-    private LinkedList<Transaction> mapResultSet (ResultSet rs) throws SQLException {
 
-        LinkedList<Transaction> transactions = new LinkedList<>();
+    /**
+     * Used to convert between a Result Set and a Map holding transaction ids and corresponding transactions
+     * throws a SQLException if rs iterating throws one.
+     * <p>
+     * @param rs                holds the database query result
+     * @return                  holding the transactionId and corresponding Transactions
+     * @throws SQLException     thrown by result set navigation
+     */
+    private Map<Integer, Transaction> mapResultSet (ResultSet rs) throws SQLException {
+
+        Map<Integer, Transaction> transactions = new Map<>();
 
         while (rs.next()){
             Transaction transaction = new Transaction();
@@ -122,7 +160,7 @@ public class TransactionRepository implements CrudRepository{
             transaction.setAccountId(rs.getInt("accountId"));
             transaction.setAmount(rs.getDouble("amount"));
             transaction.setDate(rs.getString("transaction_date"));
-            transactions.insert(transaction);
+            transactions.put(transaction.getTransactionId(), transaction);
         }
         return transactions;
     }

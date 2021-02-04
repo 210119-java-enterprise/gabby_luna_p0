@@ -1,16 +1,16 @@
 package com.revature.models;
 
-import com.revature.repositories.UserRepository;
-
-import com.revature.services.AccountService;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
 import java.util.Objects;
 
-/*
-    Holds and object representing the user and their personal information
-    from the User table to avoid multiple calls to database.
+/**
+ * Describes an object representing a user, their personal information,
+ * login information and a map of their accounts.
+ * <p>
+ * @author Wezley Singleton
+ * @author Gabrielle Luna
  */
 public class AppUser {
 
@@ -24,11 +24,23 @@ public class AppUser {
     private int numAccounts;
 
     //Constructors ---------------------------------
+
+    /**
+     * Creates an empty user
+     */
     public AppUser() {
         super();
     }
 
-    //Constructor with all but an id
+    /**
+     * Creates a user with the minimum information required. UserId and the list of
+     * accounts are uninitialized, numAccounts is set to zero.
+     * <p>
+     * @param firstName     User's first name
+     * @param lastName      User's last name
+     * @param username      User's chosen username
+     * @param password      User's chosen password
+     */
     public AppUser(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -78,19 +90,39 @@ public class AppUser {
         this.password = password;
     }
 
+    /**
+     * Used to get a list of the users active account ids for quick searches and validation
+     * <p>
+     * @return LinkedList of account Id integers
+     */
     public LinkedList<Integer> getAccounts() {
         return accounts.keyList();
     }
 
+    /**
+     * Used to retrieve an account via accountId. Calls the Map method get() on the list of
+     * accounts using the account id.
+     * <p>
+     * @param accountId     for desired account
+     * @return BankAccount  object containing all details regarding desired account
+     */
     public BankAccount getBankAccount(int accountId){
         if (accounts == null) return null;
-
         return accounts.get(accountId);
     }
 
+    /**
+     * Used to update the Users internal list of accounts, with simple validation before
+     * updating the users number of accounts
+     * <p>
+     * @param accounts  Map containing account ids and corresponding accounts
+     */
     public void setAccounts(Map<Integer, BankAccount> accounts) {
         this.accounts = accounts;
-        this.numAccounts = accounts.getSize();
+        if (accounts != null)
+            this.numAccounts = accounts.getSize();
+        else
+            numAccounts = 0;
     }
 
     public int getNumAccounts() {

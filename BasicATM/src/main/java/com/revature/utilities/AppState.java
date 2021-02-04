@@ -10,7 +10,6 @@ import com.revature.services.UserService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 
 import static com.revature.utilities.ConsoleDecoration.*;
 
@@ -40,9 +39,10 @@ public class AppState {
         router.addScreen(new HomeScreen());
         router.addScreen(new LoginScreen(userService));
         router.addScreen(new RegisterScreen(userService));
-        router.addScreen(new DashboardScreen(userService, acctService));
-        router.addScreen(new NewAccountScreen(userService, acctService));
-        router.addScreen(new TransactionScreen(userService, acctService, transService));
+        router.addScreen(new DashboardScreen(acctService));
+        router.addScreen(new NewAccountScreen(acctService));
+        router.addScreen(new TransactionScreen(acctService, transService));
+        router.addScreen(new TransactionHistoryScreen(transService));
 
         System.out.println(ANSI_GREEN + "[LOG] - Application initialized" + ANSI_RESET);
         System.out.println(CLEAR_SCREEN);
