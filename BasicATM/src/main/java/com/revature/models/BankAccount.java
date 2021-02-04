@@ -3,6 +3,8 @@ package com.revature.models;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
+import java.text.DecimalFormat;
+
 import static com.revature.utilities.ConsoleDecoration.*;
 
 /**
@@ -135,11 +137,16 @@ public class BankAccount {
      * @param color     Used to color code all account information aside from balance to match screen color
      */
     public void printAccount(String color) {
-        String message = " Account : " + accountId + "    Type: " + accountType.toString();
-        FinishLine((color + message + ANSI_RESET), message.length());
+        String message = " Account : ";
+        String message2 = "" + accountId;
+        String message3 = "    Type: " + accountType.toString();
+        FinishLine((color + message + ANSI_RESET + message2 + color + message3 + ANSI_RESET),
+                                message.length() + message2.length() + message3.length());
 
         message = "     Balance : $";
-        String bal = String.format("%.2f", balance);
-        FinishLine((color + message + ANSI_GREEN + bal + ANSI_RESET), message.length() + bal.length());
+        //String bal = String.format("%.2f", balance);
+        DecimalFormat format = new DecimalFormat("#,###.00");
+        String bal = format.format(balance);
+        FinishLine((color + message + GREEN_BOLD_BRIGHT + bal + ANSI_RESET), message.length() + bal.length());
     }
 }

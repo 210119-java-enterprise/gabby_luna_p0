@@ -160,6 +160,7 @@ public class TransactionScreen extends Screen{
         //Print Active Accounts
         for (Integer cur = accountIds.pop(); cur != null; cur = accountIds.pop()) {
             user.getBankAccount(cur).printAccount(main_color);
+            FinishLine("", 0);
         }
         FinishLine("", 0);
         message = "To make a transaction follow the prompts below...";

@@ -56,7 +56,6 @@ public class Map<K, V> {
      * @return the previous value associated with the key, could return null
      */
     public V put(K key, V value) {
-        //Todo: rewrite
         V previousValue = null;
 
         boolean wasInserted = true;

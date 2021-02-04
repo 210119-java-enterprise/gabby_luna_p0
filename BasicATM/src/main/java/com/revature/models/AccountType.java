@@ -25,5 +25,16 @@ public enum AccountType {
     /**
      * Individual Retirement Account
      */
-    IRA
+    IRA;
+
+    public String toLongName() {
+        switch(this){
+            case CHK: return "Checking Account";
+            case SVG: return "Saving Account";
+            case MMA: return "Money Market Account";
+            case CD: return "Certificates of Deposit";
+            case IRA: return "Individual Retirement Account";
+            default: throw new IllegalArgumentException();
+        }
+    }
 }

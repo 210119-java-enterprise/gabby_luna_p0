@@ -1,7 +1,5 @@
 package com.revature.utilities;
 
-import org.postgresql.util.PSQLException;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -9,15 +7,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/*
-    Singleton format!
+/**
+ * Singleton class in charge of establishing a connection to the database
+ * <p>
+ * @author Wezley Singleton
+ * @author Gabrielle Luna
  */
 public class ConnectionFactory {
-
+    //static copy of Connection Factory
     private static ConnectionFactory connFactory = new ConnectionFactory();
 
+    //Variable to hold database login credentials
     private Properties props = new Properties();
 
+    //Look for library
     static{
         try {
             Class.forName("org.postgresql.Driver");
@@ -26,6 +29,10 @@ public class ConnectionFactory {
         }
     }
 
+    //Constructors --------------------------
+    /**
+     * Private constructor loads the file containing login credentials into the Properties variable
+     */
     private ConnectionFactory(){
         try{
             props.load(new FileReader("src/main/resources/application.properties"));
@@ -34,10 +41,15 @@ public class ConnectionFactory {
         }
     }
 
+    //Getters and Setters --------------------
     public static ConnectionFactory getInstance(){
         return connFactory;
     }
 
+    /**
+     * Uses properties to initialize connection and returns that connection
+     * @return database connection
+     */
     public Connection getConnection() {
 
         Connection conn = null;

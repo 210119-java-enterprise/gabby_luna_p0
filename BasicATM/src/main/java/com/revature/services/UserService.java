@@ -6,25 +6,38 @@ import com.revature.models.AppUser;
 import com.revature.repositories.UserRepository;
 import com.revature.utilities.ConnectionFactory;
 import com.revature.utilities.Session;
-import org.postgresql.util.PSQLException;
 
 import static com.revature.ATM.app;
 import static com.revature.utilities.ConsoleDecoration.ANSI_RED;
 import static com.revature.utilities.ConsoleDecoration.ANSI_RESET;
 
-/*
-
+/**
+ * Class responsible for communicating between the Screens and the UserRepository
+ * Also contains its own UserRepository
+ * <p>
+ * @author Gabrielle Luna
  */
 public class UserService {
     //Copy of Repo ----------------------------------------
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     //Constructors ----------------------------------------
+    /**
+     * Only necessary constructor. Saves a copy of the UserRepository for
+     * future use.
+     * @param userRepo  stores a private instance of the repo
+     */
     public UserService(UserRepository userRepo){
         this.userRepo = userRepo;
     }
 
-    //Verify user credentials and start new database session
+    //Database Accesses -----------------------------------
+    /**
+     * Used to authenticate a users username and password input, rejecting empty or null strings
+     * @param username      used for user login once authenticated
+     * @param password      used for user login once authenticated
+     * @throws AuthenticationException  thrown if username password combo is not found in database
+     */
     public void authenticate(String username, String password) throws AuthenticationException{
         //Reject for empty strings
         if (username == null || username.trim().equals("") ||
@@ -42,6 +55,15 @@ public class UserService {
         app().setCurrentSession(new Session(authUser, ConnectionFactory.getInstance().getConnection()));
     }
 
+    /**
+     * Adds a new user to the database. Requires a first and last name along with a username and pass
+     * @param firstName     Users first name
+     * @param lastName      Users last name
+     * @param username      Users chosen username
+     * @param password      Users chosen password
+     * @return boolean      true is successful
+     * @throws AuthenticationException  thrown if username and password combo are unavailable
+     */
     public boolean register(String firstName, String lastName, String username, String password) throws AuthenticationException {
         //Reject if there are any empty strings
         if (    firstName == null || firstName.trim().equals("") ||

@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.text.DecimalFormat;
+
 import static com.revature.utilities.ConsoleDecoration.*;
 
 /**
@@ -91,9 +93,11 @@ public class Transaction {
      * @param color
      */
     public void printTransaction(String color) {
-        String message = "Transaction : " + transactionId + "    Date : " + date + "    Amount : $" ;
-        String t_amount = String.format("%.2f", amount);
-        String type = (transactionType == TransactionType.CREDIT)? ANSI_GREEN : ANSI_RED;
+        String message = " Date : " + date + "    Amount : $" ;
+        DecimalFormat format = new DecimalFormat("#,###.00");
+        String t_amount = format.format(amount);
+        //String t_amount = String.format("%.2f", amount);
+        String type = (transactionType == TransactionType.CREDIT)? GREEN_BOLD_BRIGHT : RED_BOLD_BRIGHT;
 
         FinishLine((color + message + type + t_amount + ANSI_RESET), message.length() + t_amount.length());
     }

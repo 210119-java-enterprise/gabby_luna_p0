@@ -101,7 +101,6 @@ public class TransactionRepository implements CrudRepository <Transaction>{
             ResultSet rs = pStmt.executeQuery();
             while (rs.next()){
                 sum = rs.getDouble(1);
-                System.out.println("New balance : " + sum);
             }
 
         }catch (SQLException e){
@@ -122,7 +121,6 @@ public class TransactionRepository implements CrudRepository <Transaction>{
      * @param amount        All transactions need a value
      */
     public void insertNewTransaction(TransactionType type, int accountId, double amount){
-        System.out.println("New Transaction type: " + type.toString() + ", account: " + accountId + ", amount: " + amount);
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
             String sql =    "INSERT INTO Transactions (Transaction_Type, AccountId, Amount)"+

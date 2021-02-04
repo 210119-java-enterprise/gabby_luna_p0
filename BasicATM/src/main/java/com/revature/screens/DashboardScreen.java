@@ -78,17 +78,18 @@ public class DashboardScreen extends Screen{
                     System.out.println(main_color + "Navigating to transaction screen...\n" + ANSI_RESET);
                     app().getRouter().navigate("/transaction");
                     break;
-                case "4":   //Transfer funds between accounts
-                    System.out.println(main_color + "Navigating to transfer funds screen...\n" + ANSI_RESET);
-                    //app().getRouter().navigate("/register");
-                    break;
-                case "5":   //Exit application (terminate connection)
+//                case "4":   //Transfer funds between accounts
+//                    System.out.println(main_color + "Navigating to transfer funds screen...\n" + ANSI_RESET);
+//                    //app().getRouter().navigate("/register");
+//                    break;
+                case "4":   //Exit application (terminate connection)
                     System.out.println(ANSI_RED + "Exiting application...\n" + ANSI_RESET);
-                    app().setAppRunning(false);
+                    app().invalidateCurrentSession();
                     app().getRouter().navigate("/home");
                     break;
                 default:    //Invalid selection
                     System.out.println(ANSI_RED + "Invalid selection!" + ANSI_RESET);
+                    app().getRouter().navigate("/dashboard");
             }
 
         }catch (Exception e) {
@@ -115,6 +116,7 @@ public class DashboardScreen extends Screen{
         //Print Active Accounts
         for (Integer cur = accountIds.pop(); cur != null; cur = accountIds.pop()) {
             user.getBankAccount(cur).printAccount(main_color);
+            FinishLine("", 0);
         }
         FinishLine("", 0);
         //Print navigation options
@@ -124,9 +126,9 @@ public class DashboardScreen extends Screen{
         FinishLine((main_color + message + ANSI_RESET), message.length());
         message = " 3.) Make Deposit/Withdrawal";
         FinishLine((main_color + message + ANSI_RESET), message.length());
-        message = " 4.) Transfer Funds";
-        FinishLine((main_color + message + ANSI_RESET), message.length());
-        message = " 5.) Logout";
+        //message = " 4.) Transfer Funds";
+        //FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = " 4.) Logout";
         FinishLine((main_color + message + ANSI_RESET), message.length());
         FinishLine("", 0);
         System.out.println(BORDER);

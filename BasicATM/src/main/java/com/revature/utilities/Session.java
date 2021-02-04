@@ -6,10 +6,16 @@ import java.sql.Connection;
 
 public class Session {
 
+    //Session attributes ------------------------------------
     private AppUser sessionUser;
     private Connection connection;
 
     //Constructors -------------------------------------------
+    /**
+     * Stores the current session user and the connection
+     * @param sessionUser       User who initiated current session
+     * @param connection        working database conenctino
+     */
     public Session(AppUser sessionUser, Connection connection){
 
         if (sessionUser == null || connection == null){

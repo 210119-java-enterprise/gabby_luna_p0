@@ -120,6 +120,7 @@ public class TransactionHistoryScreen extends Screen{
         //Print Active Accounts
         for (Integer cur = accountIds.pop(); cur != null; cur = accountIds.pop()) {
             user.getBankAccount(cur).printAccount(main_color);
+            FinishLine("", 0);
         }
         FinishLine("", 0);
         //Print navigation options
@@ -161,7 +162,12 @@ public class TransactionHistoryScreen extends Screen{
             //Print Transaction History
             for (Integer cur = transactionIds.pop(); cur != null; cur = transactionIds.pop()) {
                 transactionAccount.getTransaction(cur).printTransaction(main_color);
-            }}
+            }
+        }
+        message = "                              ------------------------------";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = "             Account Balance : $" + GREEN_BOLD_BRIGHT + transactionAccount.getBalance();
+        FinishLine((main_color + message + ANSI_RESET), message.length() - GREEN_BOLD_BRIGHT.length());
         FinishLine("", 0);
         //print navigation options
         message = " press enter to go back";

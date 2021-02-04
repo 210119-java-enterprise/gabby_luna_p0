@@ -56,7 +56,7 @@ public class NewAccountScreen extends Screen{
             //Print Account type options
             System.out.println(" What type of account would you like to open : ");
             for (int i = 0; i < AccountType.values().length; i++) {
-                System.out.println((i + 1) + ".) " + AccountType.values()[i].toString());
+                System.out.println((i + 1) + ".) " + AccountType.values()[i].toLongName());
             }
 
             //Retrieve and trim user selection

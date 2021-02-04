@@ -13,21 +13,31 @@ import java.io.InputStreamReader;
 
 import static com.revature.utilities.ConsoleDecoration.*;
 
+/**
+ * class manages application state, including storing application wide variables and
+ * a boolean for whether the app is still in a running state.
+ */
 public class AppState {
 
     //Instances shared by whole app:
-    private BufferedReader console; //Read in from console
-    private ScreenRouter router;    //Screen router (switch board)
+    private final BufferedReader console; //Read in from console
+    private final ScreenRouter router;    //Screen router (switch board)
     private Session currentSession; //Database connection for current user
-
     private boolean appRunning;
 
+    //Constructor ---------------------------------------------
+    /**
+     * The AppState constructor initializes all of the application wide variables
+     * including loading the Screen router with all of the screen in the application.
+     */
     public AppState() {
         System.out.println(ANSI_RED + "[LOG] - Initializing application..." + ANSI_RESET);
 
+        //Set appRunning to true and open a Buffered Reader
         this.appRunning = true;
         this.console = new BufferedReader(new InputStreamReader(System.in));
 
+        //Initialize all of the Services and Repositories
         final UserRepository userRepo = new UserRepository();
         final AccountRepository acctRepo = new AccountRepository();
         final TransactionRepository transRepo = new TransactionRepository();
@@ -35,6 +45,7 @@ public class AppState {
         final AccountService acctService = new AccountService(acctRepo);
         final TransactionService transService = new TransactionService(transRepo);
 
+        //Load the Screen Router
         router = new ScreenRouter();
         router.addScreen(new HomeScreen());
         router.addScreen(new LoginScreen(userService));
@@ -52,7 +63,6 @@ public class AppState {
         return console;
     }
 
-    //Return instance of router to ATM to start app
     public ScreenRouter getRouter(){
         return router;
     }
