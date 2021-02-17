@@ -1,9 +1,15 @@
 package com.revature.models;
 
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
+import com.revature.annotations.Generated;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
 import java.util.Objects;
+
+import static com.revature.model.ColumnType.DEFAULT;
+import static com.revature.model.ColumnType.PK;
 
 /**
  * Describes an object representing a user, their personal information,
@@ -12,14 +18,23 @@ import java.util.Objects;
  * @author Wezley Singleton
  * @author Gabrielle Luna
  */
+@Entity(tableName = "user_demo")
 public class AppUser {
 
     //User info ------------------------------------
+    @Column(type = PK, columnName = "userid")
+    @Generated
     private int id;
+
+    @Column(type = DEFAULT, columnName = "firstname")
     private String firstName;
+    @Column(type = DEFAULT, columnName = "lastname")
     private String lastName;
+    @Column(type = DEFAULT, columnName = "username")
     private String username;
+    @Column(type = DEFAULT, columnName = "user_password")
     private String password;
+
     private Map<Integer, BankAccount> accounts;
     private int numAccounts;
 

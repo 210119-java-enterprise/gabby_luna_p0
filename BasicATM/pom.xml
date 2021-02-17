@@ -25,6 +25,11 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.revature</groupId>
+            <artifactId>Boxed</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

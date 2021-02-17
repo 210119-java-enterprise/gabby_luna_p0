@@ -4,8 +4,15 @@ import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.AppUser;
 import com.revature.repositories.UserRepository;
+import com.revature.service.BlackBox;
+import com.revature.service.QueryBuilder;
 import com.revature.utilities.ConnectionFactory;
 import com.revature.utilities.Session;
+
+import java.net.ConnectException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.revature.ATM.app;
 import static com.revature.utilities.ConsoleDecoration.ANSI_RED;
@@ -19,16 +26,19 @@ import static com.revature.utilities.ConsoleDecoration.ANSI_RESET;
  */
 public class UserService {
     //Copy of Repo ----------------------------------------
-    private final UserRepository userRepo;
+    private final BlackBox box;
+    QueryBuilder builder = new QueryBuilder();
+
+    //private final UserRepository userRepo;
 
     //Constructors ----------------------------------------
     /**
-     * Only necessary constructor. Saves a copy of the UserRepository for
-     * future use.
-     * @param userRepo  stores a private instance of the repo
+     * Only necessary constructor. Saves a copy of the application's shared copy of the ORM
+     *
+     * @param box  application copy of ORM
      */
-    public UserService(UserRepository userRepo){
-        this.userRepo = userRepo;
+    public UserService(BlackBox box){
+        this.box = box;
     }
 
     //Database Accesses -----------------------------------
@@ -38,21 +48,36 @@ public class UserService {
      * @param password      used for user login once authenticated
      * @throws AuthenticationException  thrown if username password combo is not found in database
      */
-    public void authenticate(String username, String password) throws AuthenticationException{
-        //Reject for empty strings
-        if (username == null || username.trim().equals("") ||
-            password == null || password.trim().equals("")) {
-            throw new InvalidRequestException(ANSI_RED + "Invalid login credentials, missing input for username or password..." + ANSI_RESET);
-        }
+    public void authenticate(String username, String password)
+            throws AuthenticationException{
+        try {
+            //Initialize box connection
+            box.setCurrentConnection(box.getConnection());
 
-        //Check if Username password combo exists
-        AppUser authUser = userRepo.findUserByUsernameAndPassword(username, password);
-        if (authUser == null){
+            //write SQL
+            String query = builder.craftNewTransaction()
+                    .returnFields()
+                    .ofClassType("users")
+                    .addCondition_Operator("username", "=", username, true)
+                    .addCondition_Operator("user_password", "=", password, true)
+                    .getQuery();
+
+            //execute Query
+            box.runQuery(query);
+
+            //retrieve User
+            List<AppUser> matches = box.getResultInClass(AppUser.class);
+            if (matches.size() == 0)
+                throw new AuthenticationException(ANSI_RED + "Invalid login credentials..." + ANSI_RESET);
+            AppUser authUser = matches.get(0);
+
+            //Start new session
+            app().setCurrentSession(new Session(authUser, box));
+        }catch (IllegalArgumentException e){
             throw new AuthenticationException(ANSI_RED + "Invalid login credentials..." + ANSI_RESET);
+        }catch (SQLException | ConnectException e){
+            e.printStackTrace();
         }
-
-        //Start new session
-        app().setCurrentSession(new Session(authUser, ConnectionFactory.getInstance().getConnection()));
     }
 
     /**
@@ -74,13 +99,13 @@ public class UserService {
         }
 
         //Check if Username password combo exists
-        AppUser authUser = userRepo.findUserByUsernameAndPassword(username, password);
-        if (authUser == null){
-            //Username password combo is available
-            userRepo.createNewUser(firstName, lastName, username, password);
-        }else{
-            throw new AuthenticationException(ANSI_RED + "Username and password combo unavailable!" + ANSI_RESET);
-        }
+//        AppUser authUser = userRepo.findUserByUsernameAndPassword(username, password);
+//        if (authUser == null){
+//            //Username password combo is available
+//            userRepo.createNewUser(firstName, lastName, username, password);
+//        }else{
+//            throw new AuthenticationException(ANSI_RED + "Username and password combo unavailable!" + ANSI_RESET);
+//        }
 
         System.out.println("Registration successful!");
         return true;

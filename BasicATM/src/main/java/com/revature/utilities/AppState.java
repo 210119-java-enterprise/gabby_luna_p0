@@ -4,6 +4,7 @@ import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
 import com.revature.repositories.UserRepository;
 import com.revature.screens.*;
+import com.revature.service.BlackBox;
 import com.revature.services.AccountService;
 import com.revature.services.TransactionService;
 import com.revature.services.UserService;
@@ -20,6 +21,7 @@ import static com.revature.utilities.ConsoleDecoration.*;
 public class AppState {
 
     //Instances shared by whole app:
+    private final BlackBox box;
     private final BufferedReader console; //Read in from console
     private final ScreenRouter router;    //Screen router (switch board)
     private Session currentSession; //Database connection for current user
@@ -36,12 +38,13 @@ public class AppState {
         //Set appRunning to true and open a Buffered Reader
         this.appRunning = true;
         this.console = new BufferedReader(new InputStreamReader(System.in));
+        this.box = new BlackBox("src/main/resources/application.properties");
 
         //Initialize all of the Services and Repositories
         final UserRepository userRepo = new UserRepository();
         final AccountRepository acctRepo = new AccountRepository();
         final TransactionRepository transRepo = new TransactionRepository();
-        final UserService userService = new UserService(userRepo);
+        final UserService userService = new UserService(box);
         final AccountService acctService = new AccountService(acctRepo);
         final TransactionService transService = new TransactionService(transRepo);
 
@@ -90,4 +93,6 @@ public class AppState {
     public boolean isSessionValid(){
         return (this.currentSession != null);
     }
+
+    public BlackBox getBox() { return box; }
 }
