@@ -72,7 +72,10 @@ public class LoginScreen extends Screen{
                 app().getRouter().navigate("/dashboard");
             }
 
-        }catch (AuthenticationException|InvalidRequestException e) {
+        }catch(IllegalArgumentException | AuthenticationException e){
+            System.out.println(CLEAR_SCREEN + ANSI_RED + "Invalid login credentials... " + ANSI_RESET);
+            app().getRouter().navigate("/login");
+        }catch (InvalidRequestException e) {
             //User has inputted invalid login credentials
             //Refresh page
             app().getRouter().navigate("/login");

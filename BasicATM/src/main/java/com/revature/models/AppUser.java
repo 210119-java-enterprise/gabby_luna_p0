@@ -1,8 +1,6 @@
 package com.revature.models;
 
-import com.revature.annotations.Column;
-import com.revature.annotations.Entity;
-import com.revature.annotations.Generated;
+import com.revature.annotations.*;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
@@ -18,7 +16,8 @@ import static com.revature.model.ColumnType.PK;
  * @author Wezley Singleton
  * @author Gabrielle Luna
  */
-@Entity(tableName = "user_demo")
+@Entity(tableName = "users")
+@CredentialsClass
 public class AppUser {
 
     //User info ------------------------------------
@@ -30,9 +29,12 @@ public class AppUser {
     private String firstName;
     @Column(type = DEFAULT, columnName = "lastname")
     private String lastName;
+
     @Column(type = DEFAULT, columnName = "username")
+    @Credential
     private String username;
     @Column(type = DEFAULT, columnName = "user_password")
+    @Credential
     private String password;
 
     private Map<Integer, BankAccount> accounts;
