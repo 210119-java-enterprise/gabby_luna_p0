@@ -1,10 +1,15 @@
 package com.revature.models;
 
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
+import com.revature.annotations.Generated;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
 import java.text.DecimalFormat;
 
+import static com.revature.model.ColumnType.FK;
+import static com.revature.model.ColumnType.PK;
 import static com.revature.utilities.ConsoleDecoration.*;
 
 /**
@@ -13,13 +18,22 @@ import static com.revature.utilities.ConsoleDecoration.*;
  * <p>
  * @author Gabrielle Luna
  */
+
+@Entity(tableName = "accounts")
 public class BankAccount {
 
     //Account info ------------------------------------
+
+    @Column(type = PK, columnName = "accountid")
+    @Generated
     private int accountId;
-    private AccountType accountType;
+    @Column(type = PK, columnName = "account_type")
+    private String accountType;
+    @Column(type = FK, columnName = "userid")
     private int userId;
+    @Column(type = PK, columnName = "balance")
     private double balance;
+
     private Map<Integer, Transaction> transactions;
     private int numTransactions;
 
@@ -41,7 +55,7 @@ public class BankAccount {
      *
      */
     public BankAccount(AccountType accountType, int userId){
-        this.accountType = accountType;
+        this.accountType = accountType.toString();
         this.userId = userId;
         this.balance = 0;
     }
@@ -56,11 +70,11 @@ public class BankAccount {
     }
 
     public AccountType getAccountType() {
-        return accountType;
+        return AccountType.valueOf(accountType);
     }
 
     public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
+        this.accountType = accountType.toString();
     }
 
     public int getUserId() {
@@ -136,17 +150,17 @@ public class BankAccount {
      *
      * @param color     Used to color code all account information aside from balance to match screen color
      */
-    public void printAccount(String color) {
-        String message = " Account : ";
-        String message2 = "" + accountId;
-        String message3 = "    Type: " + accountType.toString();
+    public void printAccount(java.lang.String color) {
+        java.lang.String message = " Account : ";
+        java.lang.String message2 = "" + accountId;
+        java.lang.String message3 = "    Type: " + accountType.toString();
         FinishLine((color + message + ANSI_RESET + message2 + color + message3 + ANSI_RESET),
                                 message.length() + message2.length() + message3.length());
 
         message = "     Balance : $";
         //String bal = String.format("%.2f", balance);
         DecimalFormat format = new DecimalFormat("#,###.00");
-        String bal = format.format(balance);
+        java.lang.String bal = format.format(balance);
         FinishLine((color + message + GREEN_BOLD_BRIGHT + bal + ANSI_RESET), message.length() + bal.length());
     }
 }

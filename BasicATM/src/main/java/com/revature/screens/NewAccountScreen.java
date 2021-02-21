@@ -61,7 +61,7 @@ public class NewAccountScreen extends Screen{
 
             //Retrieve and trim user selection
             System.out.print("> ");
-            String choice = app().getConsole().readLine();
+            java.lang.String choice = app().getConsole().readLine();
             choice = choice.trim();
 
             //Allow for returning to main
@@ -107,7 +107,7 @@ public class NewAccountScreen extends Screen{
     private void renderNewAccountPrintOut(AppUser user, LinkedList<Integer> accountIds) {
         //NewAccount print out:
         System.out.println(BORDER);
-        String message = "Open a New Account";
+        java.lang.String message = "Open a New Account";
         CenterLine((main_color_bold + message + ANSI_RESET), message.length());
         FinishLine("", 0);
         FinishLine("", 0);

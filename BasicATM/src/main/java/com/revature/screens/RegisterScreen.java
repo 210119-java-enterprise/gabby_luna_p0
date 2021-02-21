@@ -97,7 +97,7 @@ public class RegisterScreen extends Screen{
     private void renderRegisterPrintOut() {
         //Register instructions:
         System.out.println(BORDER);
-        String message = "Welcome to the BasicATM!";
+        String message = "Welcome to the BasicATM, now backed by Boxed!";
         CenterLine((main_color_bold + message + ANSI_RESET), message.length());
         FinishLine("", 0);
         FinishLine("", 0);

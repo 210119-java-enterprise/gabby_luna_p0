@@ -75,30 +75,19 @@ public class UserService {
         try{
             authenticate(username, password);
             throw new InvalidRequestException(ANSI_RED + "Username and password combo unavailable!" + ANSI_RESET);
+        }catch (IllegalArgumentException e){
+            throw new InvalidRequestException(ANSI_RED + "Invalid credentials, only alphanumeric and _ permitted. All values must begin with a letter or _" + ANSI_RESET);
         }catch (AuthenticationException e){
             System.out.println("create new user");
         }
 
-        AppUser newUser = new AppUser(firstName, lastName, username, password);
-
-        //Reject if there are any empty strings
-//        if (    firstName == null || firstName.trim().equals("") ||
-//                lastName == null || lastName.trim().equals("") ||
-//                username == null || username.trim().equals("") ||
-//                password == null || password.trim().equals("")) {
-//            throw new InvalidRequestException(ANSI_RED + "Invalid credentials, no empty fields permitted!" + ANSI_RESET);
-//        }
-
-        //Check if Username password combo exists
-//        AppUser authUser = userRepo.findUserByUsernameAndPassword(username, password);
-//        if (authUser == null){
-//            //Username password combo is available
-//            userRepo.createNewUser(firstName, lastName, username, password);
-//        }else{
-//            throw new AuthenticationException(ANSI_RED + "Username and password combo unavailable!" + ANSI_RESET);
-//        }
-
-        System.out.println("Registration successful!");
-        return true;
+        try{
+            AppUser newUser = new AppUser(firstName, lastName, username, password);
+            if (box.insert(newUser))
+                System.out.println("Registration successful!");
+            return true;
+        }catch (IllegalArgumentException e){
+            throw new AuthenticationException(ANSI_RED + "Invalid credentials, only alphanumeric and _ permitted. all values must begin with a letter or _" + ANSI_RESET);
+        }
     }
 }

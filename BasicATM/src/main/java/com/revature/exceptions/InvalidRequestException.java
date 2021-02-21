@@ -22,4 +22,7 @@ public class InvalidRequestException extends RuntimeException{
         System.out.print(CLEAR_SCREEN);
         System.out.println(message);
     }
+
+    public InvalidRequestException() {
+    }
 }

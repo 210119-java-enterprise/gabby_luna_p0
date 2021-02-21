@@ -2,7 +2,6 @@ package com.revature.utilities;
 
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
-import com.revature.repositories.UserRepository;
 import com.revature.screens.*;
 import com.revature.service.BlackBox;
 import com.revature.services.AccountService;
@@ -41,11 +40,10 @@ public class AppState {
         this.box = new BlackBox("src/main/resources/application.properties");
 
         //Initialize all of the Services and Repositories
-        final UserRepository userRepo = new UserRepository();
         final AccountRepository acctRepo = new AccountRepository();
         final TransactionRepository transRepo = new TransactionRepository();
         final UserService userService = new UserService(box);
-        final AccountService acctService = new AccountService(acctRepo);
+        final AccountService acctService = new AccountService(acctRepo, box);
         final TransactionService transService = new TransactionService(transRepo);
 
         //Load the Screen Router

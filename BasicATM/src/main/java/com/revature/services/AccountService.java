@@ -4,8 +4,9 @@ import com.revature.models.AccountType;
 import com.revature.models.BankAccount;
 import com.revature.repositories.AccountRepository;
 import com.revature.service.BlackBox;
-import com.revature.utilities.AppState;
 import com.revature.utilities.Map;
+
+import java.util.List;
 
 /**
  * Class responsible for communicating between the Screens and the AccountRepository
@@ -17,6 +18,7 @@ import com.revature.utilities.Map;
 public class AccountService {
 
     //Copy of Repo ----------------------------------------
+    private final BlackBox box;
     private final AccountRepository acctRepo;
 
     //Constructors ----------------------------------------
@@ -25,8 +27,8 @@ public class AccountService {
      * future use.
      * @param acctRepo  stores a private instance of the repo
      */
-    public AccountService(AccountRepository acctRepo){
-
+    public AccountService(AccountRepository acctRepo, BlackBox box){
+        this.box = box;
         this.acctRepo = acctRepo;
     }
 
@@ -36,7 +38,18 @@ public class AccountService {
      * @param userId    used to find relevant accounts
      */
     public Map<Integer, BankAccount> getAccounts(int userId){
-        return acctRepo.findAccountsByUserId(userId);
+        Map<Integer, BankAccount> bankAccountMap = new Map<>();
+        List<BankAccount> result = null;
+
+        result = box.getObjsMatchingId("userId", Integer.toString(userId),
+                   false, new BankAccount());
+
+
+        if (result != null ){
+            for (BankAccount account : result)
+                bankAccountMap.put(account.getAccountId(), account);
+        }
+        return bankAccountMap;
     }
 
     /**
@@ -47,7 +60,8 @@ public class AccountService {
      * @param userId    records which user owns the account
      */
     public void addNewAccount(AccountType type, int userId){
-        acctRepo.insertNewAccount(type, userId);
+        BankAccount newAccount = new BankAccount(type, userId);
+        box.insert(newAccount);
     }
 
     /**

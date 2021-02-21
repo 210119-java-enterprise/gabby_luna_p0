@@ -27,7 +27,7 @@ public enum AccountType {
      */
     IRA;
 
-    public String toLongName() {
+    public java.lang.String toLongName() {
         switch(this){
             case CHK: return "Checking Account";
             case SVG: return "Saving Account";

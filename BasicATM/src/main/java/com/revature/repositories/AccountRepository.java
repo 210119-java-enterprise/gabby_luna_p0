@@ -64,7 +64,7 @@ public class AccountRepository implements CrudRepository <BankAccount>{
 
         try(Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            String sql ="SELECT * " +
+            java.lang.String sql ="SELECT * " +
                         "FROM accounts " +
                         "WHERE userId = ?";
             PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -91,7 +91,7 @@ public class AccountRepository implements CrudRepository <BankAccount>{
     public void insertNewAccount(AccountType type, int userId){
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            String sql =    "INSERT INTO Accounts (Account_Type, UserId, Balance)"+
+            java.lang.String sql =    "INSERT INTO Accounts (Account_Type, UserId, Balance)"+
                             "VALUES (?, ?, 0.00)";
             PreparedStatement pStmt = conn.prepareStatement(sql);
             pStmt.setString(1, type.toString());
@@ -118,7 +118,7 @@ public class AccountRepository implements CrudRepository <BankAccount>{
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            String sql =    "UPDATE Accounts " +
+            java.lang.String sql =    "UPDATE Accounts " +
                             "SET Balance = ? " +
                             "WHERE AccountId = ?";
             PreparedStatement pStmt = conn.prepareStatement(sql);
