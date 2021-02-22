@@ -1,15 +1,14 @@
 package com.revature.models;
 
-import com.revature.annotations.Column;
-import com.revature.annotations.Entity;
-import com.revature.annotations.Generated;
+import com.revature.Boxed.annotations.Column;
+import com.revature.Boxed.annotations.Entity;
+import com.revature.Boxed.annotations.Generated;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
 import java.text.DecimalFormat;
 
-import static com.revature.model.ColumnType.FK;
-import static com.revature.model.ColumnType.PK;
+import static com.revature.Boxed.model.ColumnType.*;
 import static com.revature.utilities.ConsoleDecoration.*;
 
 /**
@@ -27,11 +26,11 @@ public class BankAccount {
     @Column(type = PK, columnName = "accountid")
     @Generated
     private int accountId;
-    @Column(type = PK, columnName = "account_type")
+    @Column(type = DEFAULT, columnName = "account_type")
     private String accountType;
     @Column(type = FK, columnName = "userid")
     private int userId;
-    @Column(type = PK, columnName = "balance")
+    @Column(type = DEFAULT, columnName = "balance")
     private double balance;
 
     private Map<Integer, Transaction> transactions;

@@ -2,8 +2,7 @@ package com.revature.services;
 
 import com.revature.models.AccountType;
 import com.revature.models.BankAccount;
-import com.revature.repositories.AccountRepository;
-import com.revature.service.BlackBox;
+import com.revature.Boxed.service.BlackBox;
 import com.revature.utilities.Map;
 
 import java.util.List;
@@ -19,17 +18,14 @@ public class AccountService {
 
     //Copy of Repo ----------------------------------------
     private final BlackBox box;
-    private final AccountRepository acctRepo;
 
     //Constructors ----------------------------------------
     /**
      * Only necessary constructor. Saves a copy of the AccountRepository for
      * future use.
-     * @param acctRepo  stores a private instance of the repo
      */
-    public AccountService(AccountRepository acctRepo, BlackBox box){
+    public AccountService(BlackBox box){
         this.box = box;
-        this.acctRepo = acctRepo;
     }
 
     //Database Accesses -----------------------------------
@@ -66,11 +62,16 @@ public class AccountService {
 
     /**
      * Used to update the balance value of an account
-     * @param accountId     used to find appropriate account
      * @param newBalance    updated balance to be saved
      * @return              returns updated balance so it can be recorded locally
      */
-    public double updateBalance(int accountId, double newBalance){
-        return acctRepo.updateAccountBalance(accountId, newBalance);
+    public double updateBalance(BankAccount account, double newBalance){
+        box.updateField(account, "balance", Double.toString(newBalance), false);
+        return newBalance;
+    }
+
+    public void deleteAccount(int accountId){
+        box.deleteEntry(new BankAccount(), "accountId", Integer.toString(accountId),
+                false);
     }
 }

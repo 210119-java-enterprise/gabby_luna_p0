@@ -7,10 +7,8 @@ import com.revature.models.BankAccount;
 import com.revature.models.TransactionType;
 import com.revature.services.AccountService;
 import com.revature.services.TransactionService;
-import com.revature.utilities.ConnectionFactory;
 import com.revature.utilities.LinkedList;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import static com.revature.ATM.app;
@@ -60,7 +58,7 @@ public class TransactionScreen extends Screen{
         //Transaction instructions print out
         renderTransactionPrintOut(user, accountIds);
 
-        try(Connection con = ConnectionFactory.getInstance().getConnection()){
+        try{
             //Request an account for transaction
             System.out.println(ANSI_BLUE + " Pick an account number for the transaction (ex: 1000) : " + ANSI_RESET);
             System.out.print("> ");
@@ -115,7 +113,7 @@ public class TransactionScreen extends Screen{
             //Create transaction and update account records
             transService.addNewTransaction(TransactionType.values()[t_type], amount, accountId);
             double newBalance = transService.getTransactionSum(accountId);
-            transactionAccount.setBalance(accountService.updateBalance(accountId, newBalance));
+            transactionAccount.setBalance(accountService.updateBalance(transactionAccount, newBalance));
 
             System.out.print(CLEAR_SCREEN);
             System.out.println(main_color + "New Transaction successfully processed, returning to dashboard...\n" + ANSI_RESET);
@@ -129,10 +127,6 @@ public class TransactionScreen extends Screen{
         }catch (AuthenticationException | InvalidRequestException e){
             //Invalid account number provided
             app().getRouter().navigate("/transaction");
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-
         }catch (Exception e){
             e.printStackTrace();
             System.out.println(ANSI_RED + " Invalid input ... " + ANSI_RESET);

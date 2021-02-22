@@ -1,7 +1,12 @@
 package com.revature.models;
 
+import com.revature.Boxed.annotations.Column;
+import com.revature.Boxed.annotations.Entity;
+import com.revature.Boxed.annotations.Generated;
+
 import java.text.DecimalFormat;
 
+import static com.revature.Boxed.model.ColumnType.*;
 import static com.revature.utilities.ConsoleDecoration.*;
 
 /**
@@ -9,13 +14,21 @@ import static com.revature.utilities.ConsoleDecoration.*;
  * <p>
  * @author Gabrielle Luna
  */
+@Entity(tableName = "transactions")
 public class Transaction {
 
     //Transaction info ------------------------------------
+    @Column(type = PK, columnName = "transactionId")
+    @Generated
     private int transactionId;
-    private TransactionType transactionType;
+    @Column(type = DEFAULT, columnName = "transaction_type")
+    private String transactionType;
+    @Column(type = FK, columnName = "accountId")
     private int accountId;
+    @Column(type = DEFAULT, columnName = "amount")
     private double amount;
+    @Column(type = DEFAULT, columnName = "transaction_date")
+    @Generated
     private String date;
 
     //Constructors ---------------------------------
@@ -35,8 +48,8 @@ public class Transaction {
      * @param accountId         required to tie the transaction to an account
      * @param amount            required to create a transaction, expected to be positive regardless of type
      */
-    public void Transaction(TransactionType transactionType, int accountId, double amount){
-        this.transactionType = transactionType;
+    public Transaction(TransactionType transactionType, int accountId, double amount){
+        this.transactionType = transactionType.toString();
         this.accountId = accountId;
         this.amount = (transactionType == TransactionType.CREDIT)? amount : amount * -1;
     }
@@ -51,11 +64,11 @@ public class Transaction {
     }
 
     public TransactionType getTransactionType() {
-        return transactionType;
+        return TransactionType.valueOf(transactionType);
     }
 
     public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
+        this.transactionType = transactionType.toString();
     }
 
     public int getAccountId() {
@@ -96,8 +109,7 @@ public class Transaction {
         String message = " Date : " + date + "    Amount : $" ;
         DecimalFormat format = new DecimalFormat("#,###.00");
         String t_amount = format.format(amount);
-        //String t_amount = String.format("%.2f", amount);
-        String type = (transactionType == TransactionType.CREDIT)? GREEN_BOLD_BRIGHT : RED_BOLD_BRIGHT;
+        String type = (TransactionType.valueOf(transactionType) == TransactionType.CREDIT)? GREEN_BOLD_BRIGHT : RED_BOLD_BRIGHT;
 
         FinishLine((color + message + type + t_amount + ANSI_RESET), message.length() + t_amount.length());
     }

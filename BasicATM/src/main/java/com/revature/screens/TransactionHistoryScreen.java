@@ -21,7 +21,7 @@ import static com.revature.utilities.ConsoleDecoration.*;
  */
 public class TransactionHistoryScreen extends Screen{
 
-    //NewAccount Attributes ---------------------------------------
+    //Attributes ----------------------------------------------------
     private final TransactionService transactionService;
 
     //Constructor -------------------------------------------------

@@ -1,7 +1,7 @@
 package com.revature.utilities;
 
 import com.revature.models.AppUser;
-import com.revature.service.BlackBox;
+import com.revature.Boxed.service.BlackBox;
 
 import java.net.ConnectException;
 import java.sql.Connection;

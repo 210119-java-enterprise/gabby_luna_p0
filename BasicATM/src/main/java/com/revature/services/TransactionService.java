@@ -1,9 +1,11 @@
 package com.revature.services;
 
+import com.revature.Boxed.service.BlackBox;
 import com.revature.models.Transaction;
 import com.revature.models.TransactionType;
-import com.revature.repositories.TransactionRepository;
 import com.revature.utilities.Map;
+
+import java.util.List;
 
 /**
  * Class responsible for communicating between the Screens and the TransactionRepository
@@ -14,16 +16,15 @@ import com.revature.utilities.Map;
 public class TransactionService {
 
     //Copy of Repo ----------------------------------------
-    private final TransactionRepository transRepo;
+    private final BlackBox box;
 
     //Constructors ----------------------------------------
     /**
      * Only necessary constructor. Saves a copy of the TransactionRepository for
      * future use.
-     * @param transRepo  stores a private instance of the repo
      */
-    public TransactionService(TransactionRepository transRepo){
-        this.transRepo = transRepo;
+    public TransactionService(BlackBox box){
+        this.box = box;
     }
 
     //Database Accesses -----------------------------------
@@ -32,7 +33,18 @@ public class TransactionService {
      * @param accountId    used to find relevant transactions
      */
     public Map<Integer, Transaction> getTransactions(int accountId){
-        return transRepo.findTransactionsByAccountId(accountId);
+        Map<Integer, Transaction> transactionMap = new Map<>();
+        List<Transaction> result = null;
+
+        result = box.getObjsMatchingId("accountId", Integer.toString(accountId),
+                false, new Transaction());
+
+        if (result != null){
+            for (Transaction transaction: result){
+                transactionMap.put(transaction.getTransactionId(), transaction);
+            }
+        }
+        return transactionMap;
     }
 
     /**
@@ -44,7 +56,8 @@ public class TransactionService {
      * @param accountId     records which account is used in the transaction
      */
     public void addNewTransaction(TransactionType type, double amount, int accountId){
-        transRepo.insertNewTransaction(type, accountId, amount);
+        Transaction newTransaction = new Transaction(type, accountId, amount);
+        box.insert(newTransaction);
     }
 
     /**
@@ -53,6 +66,25 @@ public class TransactionService {
      * @return              returns the account balance according to all transactions for that account
      */
     public double getTransactionSum(int accountId){
-        return transRepo.SumTransactions(accountId);
+        double sum = 0;
+        List<Transaction> result = null;
+        result = box.getObjsMatchingId("accountId", Integer.toString(accountId),
+                false, new Transaction());
+
+        if (result != null){
+            for (Transaction transaction : result){
+                if (transaction.getTransactionType().equals(TransactionType.DEBIT))
+                    sum -= transaction.getAmount();
+                else
+                    sum += transaction.getAmount();
+                sum = Math.round(sum * 100.0)/100.0;
+            }
+        }
+        return sum;
+    }
+
+    public void deleteTransactions(int accountId){
+        box.deleteEntry(new Transaction(), "accountId", Integer.toString(accountId),
+                false);
     }
 }

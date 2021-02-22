@@ -78,11 +78,11 @@ public class DashboardScreen extends Screen{
                     System.out.println(main_color + "Navigating to transaction screen...\n" + ANSI_RESET);
                     app().getRouter().navigate("/transaction");
                     break;
-//                case "4":   //Transfer funds between accounts
-//                    System.out.println(main_color + "Navigating to transfer funds screen...\n" + ANSI_RESET);
-//                    //app().getRouter().navigate("/register");
-//                    break;
-                case "4":   //Exit application (terminate connection)
+                case "4":   //Transfer funds between accounts
+                    System.out.println(main_color + "Navigating to close account screen...\n" + ANSI_RESET);
+                    app().getRouter().navigate("/closeAccount");
+                    break;
+                case "5":   //Exit application (terminate connection)
                     System.out.println(ANSI_RED + "Exiting application...\n" + ANSI_RESET);
                     app().invalidateCurrentSession();
                     app().getRouter().navigate("/home");
@@ -126,9 +126,9 @@ public class DashboardScreen extends Screen{
         FinishLine((main_color + message + ANSI_RESET), message.length());
         message = " 3.) Make Deposit/Withdrawal";
         FinishLine((main_color + message + ANSI_RESET), message.length());
-        //message = " 4.) Transfer Funds";
-        //FinishLine((main_color + message + ANSI_RESET), message.length());
-        message = " 4.) Logout";
+        message = " 4.) Delete Account";
+        FinishLine((main_color + message + ANSI_RESET), message.length());
+        message = " 5.) Logout";
         FinishLine((main_color + message + ANSI_RESET), message.length());
         FinishLine("", 0);
         System.out.println(BORDER);

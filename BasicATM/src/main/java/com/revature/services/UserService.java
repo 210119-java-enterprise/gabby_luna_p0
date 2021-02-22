@@ -3,7 +3,7 @@ package com.revature.services;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.AppUser;
-import com.revature.service.BlackBox;
+import com.revature.Boxed.service.BlackBox;
 import com.revature.utilities.Session;
 
 import java.net.ConnectException;

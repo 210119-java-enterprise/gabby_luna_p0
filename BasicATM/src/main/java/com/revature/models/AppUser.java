@@ -1,13 +1,13 @@
 package com.revature.models;
 
-import com.revature.annotations.*;
+import com.revature.Boxed.annotations.*;
 import com.revature.utilities.LinkedList;
 import com.revature.utilities.Map;
 
 import java.util.Objects;
 
-import static com.revature.model.ColumnType.DEFAULT;
-import static com.revature.model.ColumnType.PK;
+import static com.revature.Boxed.model.ColumnType.DEFAULT;
+import static com.revature.Boxed.model.ColumnType.PK;
 
 /**
  * Describes an object representing a user, their personal information,

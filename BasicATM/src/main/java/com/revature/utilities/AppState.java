@@ -1,9 +1,7 @@
 package com.revature.utilities;
 
-import com.revature.repositories.AccountRepository;
-import com.revature.repositories.TransactionRepository;
 import com.revature.screens.*;
-import com.revature.service.BlackBox;
+import com.revature.Boxed.service.BlackBox;
 import com.revature.services.AccountService;
 import com.revature.services.TransactionService;
 import com.revature.services.UserService;
@@ -40,11 +38,9 @@ public class AppState {
         this.box = new BlackBox("src/main/resources/application.properties");
 
         //Initialize all of the Services and Repositories
-        final AccountRepository acctRepo = new AccountRepository();
-        final TransactionRepository transRepo = new TransactionRepository();
         final UserService userService = new UserService(box);
-        final AccountService acctService = new AccountService(acctRepo, box);
-        final TransactionService transService = new TransactionService(transRepo);
+        final AccountService acctService = new AccountService(box);
+        final TransactionService transService = new TransactionService(box);
 
         //Load the Screen Router
         router = new ScreenRouter();
@@ -55,6 +51,7 @@ public class AppState {
         router.addScreen(new NewAccountScreen(acctService));
         router.addScreen(new TransactionScreen(acctService, transService));
         router.addScreen(new TransactionHistoryScreen(transService));
+        router.addScreen(new CloseAccountScreen(transService, acctService));
 
         System.out.println(ANSI_GREEN + "[LOG] - Application initialized" + ANSI_RESET);
         System.out.println(CLEAR_SCREEN);
